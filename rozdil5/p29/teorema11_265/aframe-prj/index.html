@@ -39,7 +39,28 @@
                 entity.setAttribute('material', {opacity: opVal});
             }	
             
-            
+			AFRAME.registerComponent("lookat0", {
+				init: function() {
+					console.log("lookat0")
+					console.log(this.el)
+					this.allElem = document.getElementById('all');
+					this.allElemY0 = this.allElem.getAttribute('position').y
+				},
+				tick:function(){
+					let rot = this.el.getAttribute('rotation');
+					let pos = this.el.getAttribute('position');
+					let allRot = this.allElem.getAttribute('rotation')
+					let allPos = this.allElem.getAttribute('position')
+
+					let d = Math.sqrt((pos.x-allPos.x)**2+(pos.z-allPos.z)**2)
+
+					this.allElem.setAttribute('position',{x: -d*Math.sin(rot.y*Math.PI/180), y: this.allElemY0 +d*Math.sin(rot.x*Math.PI/180) , z: -d*Math.cos(rot.y*Math.PI/180)}	)
+					// console.log(rot.y,rot.x,rot.z, pos, allPos)
+
+
+				}
+			});
+
               AFRAME.registerComponent("hideonclick", {
                 init: function() {
                     this.hasClicked = false;
@@ -129,7 +150,7 @@
           
           </a-entity>
     </a-entity>
-
+	<a-entity id="cam" camera look-controls lookat0></a-entity>
     </a-scene>
     </body>
 </html>
